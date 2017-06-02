@@ -55,17 +55,21 @@ angular.module('starter.controllers', [])
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller("ExampleController", function($scope, $cordovaBarcodeScanner) {
+.controller("ExampleController", function($scope, $cordovaBarcodeScanner,$ionicPlatform) {
 
   $scope.scanBarcode = function() {
-    $ionicPlatform.ready(function() {
-      $cordovaBarcodeScanner.scan().then(function(imageData) {
-        alert(imageData.text);
-        console.log("Barcode Format -> " + imageData.format);
-        console.log("Cancelled -> " + imageData.cancelled);
-      }, function(error) {
-        console.log("An error happened -> " + error);
-      });
+    $ionicPlatform.ready(function () {
+      cordova.plugins.barcodeScanner.scan(
+        function (result) {
+          alert("We got a barcode\n" +
+            "Result: " + result.text + "\n" +
+            "Format: " + result.format + "\n" +
+            "Cancelled: " + result.cancelled);
+        },
+        function (error) {
+          alert("Scanning failed: " + error);
+        }
+      );
     })
   }
 
